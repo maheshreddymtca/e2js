@@ -30,8 +30,6 @@ function getNodePorts(obj) {
 var bounds = document.getElementById('element').getBoundingClientRect();
 var centerX = bounds.width / 2;
 //Initializes the nodes for the diagram
-
-
 var data = [
     { 
 		id: 'Start',
