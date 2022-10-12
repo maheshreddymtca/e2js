@@ -31,43 +31,31 @@ var bounds = document.getElementById('element').getBoundingClientRect();
 var centerX = bounds.width / 2;
 //Initializes the nodes for the diagram
 
-	
+
 var data = [
     { 
 		id: 'Start',
-		offsetX: (centerX - 50) - 450,
-		//offsetX: 150, 
-		offsetY: 250, 
 		shape: {
 			type: 'HTML',
 			content: '<div style="background:#f8e991;" class="box"><span class="start">Start</span><div class="heading hbg1"><span class="e-icons e-settings"></span> <span>CreditRequest</span></div><ul class="contentList"><li><span class="e-icons e-file"></span> Task Outcomes</div></li></ul><div class="btnGroup"><button type="button" class="btn">Submit</button></div></div>'
         }
 	},
 	{ 
-		id: 'creatCustomer',
-		offsetX: (centerX - 50) - 150,
-		//offsetX: 450, 
-		offsetY: 250, 
+		id: 'creatCustomer', 
 		shape: {
 			type: 'HTML',
 			content: '<div style="background:#96e7f7;" class="box"><div class="heading hbg2"><span class="e-icons e-settings"></span> <span class="title">CreateCustomer</span></div><ul class="contentList"><li><span class="e-icons e-file"></span> CustomerDetailsParam<p style="text-align:right" id="box"><span class="tooltip">ViewAll</span></p><div class="viewAllTool tooltip-content"><ul><li><b>Task Name</b><span>CustomerCreated</span></li><li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li><li><b>Invode</b><span>AutoCreditCheck</span></li></ul></div></li><li><span class="e-icons e-file"></span> Task Outcomes</li></ul><div class="btnGroup"><button type="button" class="btn">Customer Created</button></div></div>'
         }
 	},
 	{ 
-		id: 'autoCreditCheck',
-		offsetX: (centerX - 50) + 150,
-		//offsetX: 750, 
-		offsetY: 250, 
+		id: 'autoCreditCheck', 
 		shape: {
 			type: 'HTML',
 			content: '<div style="background:#96f7c5;" class="box"><div class="heading hbg3"><span class="e-icons e-settings"></span> <span> Auto Credit Check</span></div><ul class="contentList"><li><span class="e-icons e-file"></span> 1: Amount<p style="text-align:right" id="box" class="tooltip"><span class="tooltip">ViewAll</span></p><div class="viewAllTool tooltip-content"><ul><li><b>Task Name</b><span>CustomerCreated</span></li><li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li><li><b>Invode</b><span>AutoCreditCheck</span></li></ul></div></li><li><span class="e-icons e-file"></span> Task Outcomes</li></ul><div class="btnGroup"><button type="button" class="btn">Manual Credit Check</button><button type="button" class="btn">Approve</button></div></div>'
         }
 	},
 	{ 
-		id: 'autoDecision',
-		offsetX: (centerX - 50) + 450,
-		//offsetX: 1050, 
-		offsetY: 250, 
+		id: 'autoDecision', 
 		shape: {
 			type: 'HTML',
 			content: '<div style="background:#f6b79c;" class="box"><div class="heading hbg4"><span class="e-icons e-settings"></span> <span> Auto Decision</span></div><ul class="contentList"><li><span class="e-icons e-file"></span> 1: Amount<p style="text-align:right" id="box" class="tooltip"><span class="tooltip">ViewAll</span></p><div class="viewAllTool tooltip-content"><ul><li><b>Task Name</b><span>CustomerCreated</span></li><li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li><li><b>Invode</b><span>AutoCreditCheck</span></li></ul></div></li><li><span class="e-icons e-file"></span> Task Outcomes</li></ul><div class="btnGroup"><button type="button" class="btn">Approve</button><button type="button" class="btn btn-danger">Decline</button></div></div>'
@@ -75,9 +63,6 @@ var data = [
 	} ,
 	{ 
 		id: 'manualCreditAnalysis',
-		offsetX: (centerX - 50) - 150,
-		//offsetX: 550, 
-		offsetY: 550, 
 		shape: {
 			type: 'HTML',
 			content: '<div style="background:#efbef4;" class="box"><div class="heading hbg5"><span class="e-icons e-settings"></span> <span>Manual Credit Analysis</span></div><ul class="contentList"><li><span class="e-icons e-file"></span>Rile 1: ManualCreditCheck<p style="text-align:right" id="box" class="tooltip"><span class="tooltip">ViewAll</span></p><div class="viewAllTool tooltip-content"><ul><li><b>Task Name</b><span>CustomerCreated</span></li><li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li><li><b>Invode</b><span>AutoCreditCheck</span></li></ul></div></li><li><span class="e-icons e-file"></span> Task Outcomes</li></ul><div class="btnGroup"><button type="button" class="btn">Approve</button><button type="button" class="btn btn-danger">Decline</button></div></div>'
@@ -85,9 +70,6 @@ var data = [
 	},
 	{ 
 		id: 'createAsset',
-		offsetX: (centerX - 50) + 150,
-		//offsetX: 870, 
-		offsetY: 550, 
 		shape: {
 			shape: 'Process',
 			type: 'HTML',
@@ -96,9 +78,6 @@ var data = [
 	},
 	{ 
 		id: 'createLoc',
-		offsetX: (centerX - 50) + 450,
-		//offsetX: 1200, 
-		offsetY: 550, 
 		shape: {
 			shape: 'Process',
 			type: 'HTML',
@@ -107,9 +86,6 @@ var data = [
 	},
 	{ 
 		id: 'endProcess',
-		offsetX: (centerX - 50) + 300,
-		//offsetX: 1020, 
-		offsetY: 850, 
 		width: 100,
 		height: 100,
 		shape: {
@@ -118,6 +94,31 @@ var data = [
         }
 	}  
 ]
+
+console.log("Actual Data --> " + data);
+
+var x = -450;
+var y = 250;
+const formattedData = data.map((item, index) => {
+	const data = {};
+	data.id = item.id;
+	var currentIndex = index;
+	if (currentIndex % 4 != 0 || currentIndex == 0) {
+		data.offsetX = (centerX - 50) + x;
+		data.offsetY = y;
+		x = x + 300;
+	} else {
+		x = -450;
+		y = y + 300;
+		data.offsetX = (centerX - 50) + x;
+		x = x + 300;
+		data.offsetY = y;
+	}
+	data.shape = item.shape;
+	return data;
+});
+console.log("Formatted Data --> " + formattedData);
+
 
 var connectors = [ 
 { id: "connector1", type: 'Orthogonal', sourceID: 'Start', targetID: 'creatCustomer', sourcePortID: 'port1', targetPortID: 'port2' }, 
@@ -153,7 +154,7 @@ document.getElementById('box').addEventListener("dblclick", function () {
 	var diagram = new ej.diagrams.Diagram({
 		width: '100%', 
 		height: '1000px', 
-		nodes: data, 
+		nodes: formattedData, 
 		connectors: connectors,
 		constraints: ej.diagrams.DiagramConstraints.Default | (ej.diagrams.DiagramConstraints.Bridging | ej.diagrams.DiagramConstraints.LineRouting),
         snapSettings: { constraints: ej.diagrams.SnapConstraints.None },
