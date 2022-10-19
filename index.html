@@ -227,8 +227,50 @@ p {
             </div>
         </div>
     </template>
+	<template id="parall-task-template">
+        <div style="background: #f8e991;" class="box">
+            <div class="heading hbg2">
+                <span class="task_icon"><img src="./images/Human-task.png"></span>
+                <span class="title">${TaskName}</span>
+            </div>
+            <ul class="contentList">
+                <li>
+                    <span class="task_icon"><img src="./images/Outcomes.png"></span> ${TaskOutcomes}
+                </li>
+            </ul>
+            <div id="human-task-actions" class="btnGroup">
+
+            </div>
+        </div>
+    </template>
 
     <template id="transaction-task-template">
+        <div style="background:#96e7f7;" class="box">
+            <div class="heading hbg2">
+                <span class="task_icon"><img src="./images/Human-task.png"></span>
+                <span class="title">${TaskName}</span>
+            </div>
+            <ul class="contentList">
+                <li>
+                    <span class="e-icons e-file"></span> CustomerDetailsParam
+                    <p style="text-align:right" id="box"><span class="tooltip">ViewAll</span></p>
+                    <div class="viewAllTool tooltip-content">
+                        <ul>
+                            <li><b>Task Name</b><span>CustomerCreated</span></li>
+                            <li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li>
+                            <li><b>Invode</b><span>AutoCreditCheck</span></li>
+                        </ul>
+                    </div></li>
+                <li>
+                    <span class="task_icon"><img src="./images/Outcomes.png" ></span> ${TaskOutcomes}
+                </li>
+            </ul>
+            <div id="human-task-actions" class="btnGroup">
+
+            </div>
+        </div>
+    </template>
+	<template id="decisionTaskNode-task-template">
         <div style="background:#96e7f7;" class="box">
             <div class="heading hbg2">
                 <span class="task_icon"><img src="./images/Human-task.png"></span>
@@ -284,6 +326,6 @@ p {
     </template>
     </div>
 </div>
-		<script src="demo.js" type="text/javascript"></script>
+		<script src="index.js" type="text/javascript"></script>
 	</body>
 </html>
