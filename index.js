@@ -9,34 +9,54 @@ class TaskOutCome{
   }
 }
 
+
 class TaskNode {
-    constructor(TaskName, TaskType, Description)
+  /*  constructor(TaskName, TaskType, Description, nul)
     {
         this.TaskName = TaskName;
         this.TaskType = TaskType;
         this.Description = Description
-    }
+    } */
     
+	constructor(TaskName, TaskType, Description, TaskOutCome)
+    {
+        this.TaskName = TaskName;
+        this.TaskType = TaskType;
+        this.Description = Description;
+		this.TaskOutCome = TaskOutCome;
+    }
+	
     setTaskOutComes(TaskOutcomes){
         this.TaskOutcomes = TaskOutcomes;
     }
-
     setTaskData(TaskData){
-
     }
-
     setEligibilityRules(setEligibilityRules){
-
     }
-
     prepareBaseHTMLContent(content){
-        content = content.children[0].outerHTML.replace("${TaskName}", this.TaskName);
+        content = content.children[0].outerHTML.replace("${TaskName}", this.TaskName).replace("${TaskOutcomes}", this.TaskOutCome);
         return content;
     }
 }
 
 class HumanTaskNode extends TaskNode {
     TEMPLATE_ID = "#human-task-template";
+    constructor(TaskName, TaskType, Description, TaskOutCome){
+        super(TaskName, TaskType, Description, TaskOutCome);    
+    }
+    setUIForm(uiform){
+        this.UIForm = uiform;
+    }
+    getHTMLContent(){
+        var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+        // ... Do other task specific manipulation 
+        //console.log(content);
+        return content;
+    }
+}
+
+class ParallelTaskNode extends TaskNode {
+    TEMPLATE_ID = "#parall-task-template";
 
     constructor(TaskName, TaskType, Description){
         super(TaskName, TaskType, Description);
@@ -55,15 +75,14 @@ class HumanTaskNode extends TaskNode {
     }
 }
 
+
 class TransactionTaskNode extends TaskNode {
     TEMPLATE_ID = "#transaction-task-template";
 
     constructor(TaskName, TaskType, Description)
     {
-        super(TaskName, TaskType, Description);
-        
+        super(TaskName, TaskType, Description);      
     }
-
     getHTMLContent() {
         var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
         // .. DO Task specific manipulation
@@ -72,8 +91,19 @@ class TransactionTaskNode extends TaskNode {
     }
 }
 
-
-
+class DecisionTaskNode extends TaskNode {
+    TEMPLATE_ID = "#decisionTaskNode-task-template";
+    constructor(TaskName, TaskType, Description)
+    {
+        super(TaskName, TaskType, Description);   
+    }
+    getHTMLContent() {
+        var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+        // .. DO Task specific manipulation
+        //console.log(content);
+        return content;
+    }
+}
 
 function getTasks() {
 	var bounds = document.getElementById('diagram').getBoundingClientRect();
@@ -130,15 +160,24 @@ function getTasks() {
 	  ]
 	}
 	console.log('results',results.TaskConfigDetails)
-    /* tasks.push(new HumanTaskNode(results.TaskConfigDetails[0].TaskName, results.TaskConfigDetails[0].TaskType, results.TaskConfigDetails[0].Description));
-	tasks.push(new TransactionTaskNode(results.TaskConfigDetails[1].TaskName, results.TaskConfigDetails[1].TaskType, results.TaskConfigDetails[1].Description));
-    //tasks.push(new TransactionTaskNode("Create Asset", "Some Description")); */
-	 for (var i = 0; i < results.TaskConfigDetails.length; i++) {
-       
-        if (results.TaskConfigDetails[i].TaskType == 'HumanTask') {
-			tasks.push(new HumanTaskNode(results.TaskConfigDetails[i].TaskName, results.TaskConfigDetails[i].TaskType, results.TaskConfigDetails[i].Description));
+	results.TaskConfigDetails.forEach((item, i) => {
+		console.log('>>>',item);
+		if(item.TaskType == "HumanTask"){
+			//var TaskOutCome = new TaskOutCome();
+			tasks.push(new HumanTaskNode(item.TaskName, item.TaskType, item.Description, new TaskOutCome(item.TaskConfigTaskOutcomes[i].Name, item.TaskConfigTaskOutcomes[i].Name, item.TaskConfigTaskOutcomes[i].Name))); 
+			
+		}else if(item.TaskType == "ParallelTask"){
+			tasks.push(new ParallelTaskNode(item.TaskName, item.TaskType, item.Description, null)); 
+		}else if(item.TaskType == "DecisionTask"){
+			tasks.push(new DecisionTaskNode(item.TaskName, item.TaskType, item.Description, null)); 
 		}
-	 }
+		
+	})
+    
+    
+    
+    //tasks.push(new DecisionTaskNode("Create DecisionTask", "Some Description")); 
+	 
 	var x = -450;
 	var y = 200;
 	const allTaskdata = {};
