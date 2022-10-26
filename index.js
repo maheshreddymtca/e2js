@@ -18,12 +18,12 @@ class TaskNode {
         this.Description = Description
     } */
     
-	constructor(TaskName, TaskType, Description, TaskOutCome)
+	constructor(TaskName, TaskType, Description)
     {
         this.TaskName = TaskName;
         this.TaskType = TaskType;
         this.Description = Description;
-		this.TaskOutCome = TaskOutCome;
+		//this.TaskOutCome = TaskOutCome;
     }
 	
     setTaskOutComes(TaskOutcomes){
@@ -41,8 +41,8 @@ class TaskNode {
 
 class HumanTaskNode extends TaskNode {
     TEMPLATE_ID = "#human-task-template";
-    constructor(TaskName, TaskType, Description, TaskOutCome){
-        super(TaskName, TaskType, Description, TaskOutCome);    
+    constructor(TaskName, TaskType, Description){
+        super(TaskName, TaskType, Description);    
     }
     setUIForm(uiform){
         this.UIForm = uiform;
@@ -230,11 +230,11 @@ function getTasks() {
 			]
 		}
 	console.log('results',results.TaskConfigDetails)
-	results.TaskConfigDetails.forEach((item, i) => {
+	results.WorkflowDefintion.forEach((item, i) => {
 		console.log('>>>',item);
 		if(item.TaskType == "HumanTask"){
 			//var TaskOutCome = new TaskOutCome();
-			tasks.push(new HumanTaskNode(item.TaskName, item.TaskType, item.Description, new TaskOutCome(item.TaskConfigTaskOutcomes[i].Name, item.TaskConfigTaskOutcomes[i].Name, item.TaskConfigTaskOutcomes[i].Name))); 
+			tasks.push(new HumanTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription)); 
 			
 		}else if(item.TaskType == "ParallelTask"){
 			tasks.push(new ParallelTaskNode(item.TaskName, item.TaskType, item.Description, null)); 
@@ -252,7 +252,6 @@ function getTasks() {
 	var y = 200;
 	const allTaskdata = {};
 	const Data = tasks.map((tasks, index) => {
-		
 		const data = [];
 		var currentIndex = index;
 		if (currentIndex % 4 != 0 || currentIndex == 0) {
@@ -358,7 +357,7 @@ function Createnode(data) {
         var ports = [
             { id: 'port1', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 1, y: 0.9 } },
             { id: 'port2', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 0, y: 0.1 } },
-            /*{ id: 'port3', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 1, y: 0.9 } },
+            { id: 'port3', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 1, y: 0.9 } },
             { id: 'port4', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 0, y: 0.1 } },
             { id: 'port5', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 0.3, y: 1 } },
             { id: 'port6', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 0.5, y: 0 } },
@@ -375,7 +374,7 @@ function Createnode(data) {
             { id: 'port17', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 1, y: 0.9 } },
             { id: 'port18', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 0, y: 0.1 } },
             { id: 'port19', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 0.3, y: 1 } },
-            { id: 'port20', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 1, y: 0.5 } }*/
+            { id: 'port20', shape: 'Circle', style: { strokeColor: '', fill: '' }, offset: { x: 1, y: 0.5 } }
         ];
         return ports;
     }
@@ -383,8 +382,9 @@ function Createnode(data) {
 
    
 
-
-    /*var data = [
+    var bounds = document.getElementById('diagram').getBoundingClientRect();
+    var centerX = bounds.width / 2;
+    var data = [
         {
             id: 'Start',
             offsetX: (centerX - 50) - 450,
@@ -492,11 +492,11 @@ function Createnode(data) {
                     content: '<div style="height: 100px;width: 100px;border: 2px solid red;border-radius: 100%;background-color: #fa0b0b;display: flex;justify-content: center;align-items: center;color: #fff;">End Process</div>'
                 }
             }
-    ]*/
+    ]
 
     var connectors = [
         { id: "connector1", type: 'Orthogonal', sourceID: 'Start', targetID: 'creatCustomer', sourcePortID: 'port1', targetPortID: 'port2' },
-        /*{ id: "connector2", type: 'Orthogonal', sourceID: 'creatCustomer', targetID: 'autoCreditCheck', sourcePortID: 'port3', targetPortID: 'port4' },
+        { id: "connector2", type: 'Orthogonal', sourceID: 'creatCustomer', targetID: 'autoCreditCheck', sourcePortID: 'port3', targetPortID: 'port4' },
         { id: "connector3", type: 'Orthogonal', sourceID: 'autoCreditCheck', targetID: 'manualCreditAnalysis', sourcePortID: 'port5', targetPortID: 'port6' },
         { id: "connector4", type: 'Orthogonal', sourceID: 'autoCreditCheck', targetID: 'autoDecision', sourcePortID: 'port7', targetPortID: 'port8' },
         { id: "connector5", type: 'Orthogonal', sourceID: 'autoDecision', targetID: 'createAsset', sourcePortID: 'port9', targetPortID: 'port10', segments: [{ type: 'Orthogonal', direction: 'Bottom', length: 40 }], },
@@ -504,7 +504,7 @@ function Createnode(data) {
         { id: "connector7", type: 'Orthogonal', sourceID: 'manualCreditAnalysis', targetID: 'createAsset', sourcePortID: 'port13', targetPortID: 'port14', segments: [{ type: 'Orthogonal', direction: 'Bottom', length: 60 }], },
         { id: "connector8", type: 'Orthogonal', sourceID: 'manualCreditAnalysis', targetID: 'endProcess', sourcePortID: 'port15', targetPortID: 'port16' },
         { id: "connector9", type: 'Orthogonal', sourceID: 'createAsset', targetID: 'createLoc', sourcePortID: 'port17', targetPortID: 'port18' },
-        { id: "connector10", type: 'Orthogonal', sourceID: 'createLoc', targetID: 'endProcess', sourcePortID: 'port19', targetPortID: 'port20' }*/
+        { id: "connector10", type: 'Orthogonal', sourceID: 'createLoc', targetID: 'endProcess', sourcePortID: 'port19', targetPortID: 'port20' }
     ]
 
     
@@ -517,7 +517,7 @@ function Createnode(data) {
     var diagram = new ej.diagrams.Diagram({
         width: '100%',
         height: '1000px',
-        nodes: newData.nodes,
+        nodes: data,
         connectors: connectors,
         constraints: ej.diagrams.DiagramConstraints.Default | (ej.diagrams.DiagramConstraints.Bridging | ej.diagrams.DiagramConstraints.LineRouting),
         snapSettings: { constraints: ej.diagrams.SnapConstraints.None },
