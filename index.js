@@ -111,54 +111,124 @@ function getTasks() {
     //Initializes the nodes for the diagram
     var tasks =  [] ;
 	var results = {
-	  "TransactionConfig": 0,
-	  "TaskConfigDetails": [
-		{
-		  "TaskType": "HumanTask",
-		  "TaskName": "Data Gathering",
-		  "Description": "Lease Data Gathering Step",
-		  "TaskConfigEligibilityRules": [
-			{
-			  "Name": "Rule 1",
-			  "Expression": "e.Id"
-			}
-		  ],
-		  "TaskConfigDependencies": [
-			{
-			  "Name": "Dep 1"
-			}
-		  ],
-		  "TaskConfigTaskOutcomes": [
-			{
-			  "Name": "SubmitForFinalApprovalParallel",
-			  "Task": {
-				"TaskType": "ParallelTask",
-				"TaskName": "SubmitForFinalApprovalParallel",
-				"Description": "Submit For Final Approval"
-			  }
-			},
-			{
-			  "Name": "GenerateDocumentDescisionFlow",
-			  "Task": {
-				"TaskType": "DecisionTask",
-				"TaskName": "GenerateDocumentDescisionFlow",
-				"Description": "Generate Document Descision"
-			  }
-			}
-		  ]
-		},
-		{
-		  "TaskType": "ParallelTask",
-		  "TaskName": "SubmitForFinalApprovalParallel",
-		  "Description": "Submit For Final Approval"
-		},
-		{
-		  "TaskType": "DecisionTask",
-		  "TaskName": "GenerateDocumentDescisionFlow",
-		  "Description": "Generate Document Descision"
+		"WorkflowDefintion" : 
+			[
+				{
+					"StartTask" : true,
+					"TaskInfo":{
+						"TaskName": "DataEntry",
+						"TaskType" : "HumanTask",
+						"TaskDescription" : "....",
+						"AdditionalInfo": {
+							"UIForm" : "" ,
+							"TransactionName" : "",
+							"EntityName" : " ",
+							"EntityActionName" : "",
+							"ComponentName" : " " ,
+							"DecisionTableName" : " "
+						}
+					},
+					"TaskEligibilityRules" : [
+						{
+							"Name": "xxxx",
+							"Expresison": "...."
+						}
+					],
+				   "Dependencies" :[
+					  "task1", "task2" ],
+				   "EntityRules" :[
+					  {
+						"FieldInputRules" : [ "Rule1","Rule2" ]
+					  }
+					],
+					"TaskOutcomes" : [
+					   {
+						 "ActionName" : "Approve",
+						 "NextTask" : "......" ,
+						 "Expression" : ".....",
+						 "MarkAsComplete" : true,
+						 "TerminateProcess" : true
+					   }
+					]
+				},
+				{
+					"StartTask" : true,
+					"TaskInfo":{
+						"TaskName": "SubmitForFinalApprovalParallel",
+						"TaskType" : "ParallelTask",
+						"TaskDescription" : "Submit For Final Approval",
+						"AdditionalInfo": {
+							"UIForm" : "" ,
+							"TransactionName" : "",
+							"EntityName" : " ",
+							"EntityActionName" : "",
+							"ComponentName" : " " ,
+							"DecisionTableName" : " "
+						}
+					},
+					"TaskEligibilityRules" : [
+						{
+							"Name": "xxxx",
+							"Expresison": "...."
+						}
+					],
+				   "Dependencies" :[
+					  "task1", "task2" ],
+				   "EntityRules" :[
+					  {
+						"FieldInputRules" : [ "Rule1","Rule2" ]
+					  }
+					],
+					"TaskOutcomes" : [
+					   {
+						 "ActionName" : "Approve",
+						 "NextTask" : "......" ,
+						 "Expression" : ".....",
+						 "MarkAsComplete" : true,
+						 "TerminateProcess" : true
+					   }
+					]
+				},
+				{
+					"StartTask" : true,
+					"TaskInfo":{
+						"TaskName": "GenerateDocumentDescisionFlow",
+						"TaskType" : "DecisionTask",
+						"TaskDescription" : "Generate Document Descision",
+						"AdditionalInfo": {
+							"UIForm" : "" ,
+							"TransactionName" : "",
+							"EntityName" : " ",
+							"EntityActionName" : "",
+							"ComponentName" : " " ,
+							"DecisionTableName" : " "
+						}
+					},
+					"TaskEligibilityRules" : [
+						{
+							"Name": "xxxx",
+							"Expresison": "...."
+						}
+					],
+				   "Dependencies" :[
+					  "task1", "task2" ],
+				   "EntityRules" :[
+					  {
+						"FieldInputRules" : [ "Rule1","Rule2" ]
+					  }
+					],
+					"TaskOutcomes" : [
+					   {
+						 "ActionName" : "Approve",
+						 "NextTask" : "......" ,
+						 "Expression" : ".....",
+						 "MarkAsComplete" : true,
+						 "TerminateProcess" : true
+					   }
+					]
+				}
+			]
 		}
-	  ]
-	}
 	console.log('results',results.TaskConfigDetails)
 	results.TaskConfigDetails.forEach((item, i) => {
 		console.log('>>>',item);
