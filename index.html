@@ -6,8 +6,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="Typescript UI Controls">
 		<meta name="author" content="Syncfusion">
-		<link href="demo.css" rel="stylesheet">
-		
 		<link href="https://cdn.syncfusion.com/ej2/20.2.43/ej2-base/styles/material.css" rel="stylesheet">
 		<link href="https://cdn.syncfusion.com/ej2/20.2.43/ej2-buttons/styles/material.css" rel="stylesheet">
 		<link href="https://cdn.syncfusion.com/ej2/20.2.43/ej2-popups/styles/material.css" rel="stylesheet">
@@ -15,199 +13,55 @@
 		<link href="https://cdn.syncfusion.com/ej2/20.2.43/ej2-diagrams/styles/material.css" rel="stylesheet">
 		<link href="https://cdn.syncfusion.com/ej2/20.2.43/ej2-navigations/styles/fabric.css" rel="stylesheet">
 		
-		<script src="https://cdn.syncfusion.com/ej2/20.2.43/dist/ej2.min.js" type="text/javascript"></script>
+		<script src="./ej2.min.js" type="text/javascript"></script>
 		 <link href="https://ej2.syncfusion.com/demos/src/diagram/styles/diagram-common.css" rel="stylesheet">
 		  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <style>
-           .box {
-    min-height: 200px;
-    width: 200px;
-    border: 2px solid #c6b96b;
-    border-radius: 5px;
-}
+p{padding: 0px;margin: 0px;}
+#box{cursor: pointer;}
+.box {min-height: 200px;border: 2px solid #c6b96b;border-radius: 5px;}
 
-#box {
-    cursor: pointer;
-}
+.box.human_task {background-color: #faea8d;}
+.box.transaction_task {background-color:#8de6fa;}
+.box.entityapi_task {background-color:#bed0f8;}
+.box.business_task {background-color:#fca984;}
+.box.parallel_task {background-color:#f7fdc8;}
+.box.component_task {background-color:#7de9e2;}
+.box.decision_task {background-color:#ddddddb8;}
 
-.contentList {
-    padding: 10px;
-    margin: 0px;
-}
+.human_task .taskHeader {background-color:#e9cf33;}
+.transaction_task .taskHeader {background-color:#4ed2f0;}
+.entityapi_task .taskHeader {background-color:#80a1e7;}
+.business_task .taskHeader {background-color:#e9865c;}
+.parallel_task .taskHeader {background-color:#ccd685;}
+.component_task .taskHeader {background-color:#5cc1ba;}
+.decision_task .taskHeader {background-color:#ddd;}
 
-    .contentList li {
-        border-bottom: 1px solid #c6b96b;
-        padding: 10px 0px;
-        list-style-type: none;
-    }
+.btnGroup {text-align: justify;position: absolute;bottom: 0;width: 100%;display: grid;grid-template-columns: auto auto;grid-gap: 1px;grid-template-columns: repeat(auto-fit, minmax(94px,1fr));}
+.btnGroup .btn {padding: 6px 6px; color: #fff;text-align: center;}
+.Approve{background-color:#00c53a;}
+.Decline,.Reject{background-color:#ff6f6f;}
+.Refer{background-color:#ff7700;}
+.Other{background-color:#009dc6;}
+.taskHeader {padding: 4px 6px;border-radius: 5px 5px 0px 0px;display: flex;justify-content: space-between;align-items: center;}
+.taskHeader .taskName {background-color: #fff;width: 100%;padding: 4px;border-radius: 2px;margin-left: 6px;}
+.task_icon img {width: 20px;height: 20px;}
+.taskBody{padding: 10px;margin: 0px;}
+.taskOutcomes {display: flex;align-items: center;}
+.contentList {padding: 0px;margin: 0px;margin-bottom: 10px;}
+.contentList li {border-bottom: 1px solid #c6b96b;padding: 8px 0px;list-style-type: none;display: flex;align-items: center;}
+.start {left: 10px;position: absolute;top: -22px;background-color: #44bed5;padding: 4px 15px;border-radius: 4px 4px 0px 0px;font-weight: 500;color: #fff;}
+.viewAllTool {position: absolute;background-color: #fff;padding: 10px;display: none;}
+.viewAllTool ul {padding: 0px;margin: 0px;}
+.viewAllTool ul li {border-bottom: 0;}
+.e-settings:before {content: '\e679';}
+.e-file:before {content: '\ebdc';}
+.tooltip:focus .tooltip-icon, .tooltip:hover .tooltip-icon {color: #383838;}
+.tooltip:focus ~ .tooltip-content, .tooltip:hover ~ .tooltip-content {display: block;z-index: 0;opacity: 1;}
+.tooltip-content {position: absolute;top: 160px;right: 60px;transform: translateY(-100%);border: 0.063rem solid #383838;border-radius: 4px;opacity: 1;padding: 0.5rem 1rem;}
+.tooltip-icon {width: 1.5rem;height: 1.5rem;cursor: help;position: relative;z-index: 1;color: #ff9323;transition: color ease 300ms;}
+.tooltip-content:after {content: '';position: absolute;right: 0;margin-right: -30px;margin-top: -10px;top: 50%;-webkit-transform: translateX(-50%);transform: translateX(-50%);border: 10px solid transparent;border-left-color: #ffffff;}
 
-p {
-    padding: 0px;
-    margin: 0px;
-}
-
-.start {
-    left: 10px;
-    position: absolute;
-    top: -22px;
-    background-color: #44bed5;
-    padding: 4px 15px;
-    border-radius: 4px 4px 0px 0px;
-    font-weight: 500;
-    color: #fff;
-}
-
-.viewAllTool {
-    position: absolute;
-    background-color: #fff;
-    padding: 10px;
-    display: none;
-}
-
-    .viewAllTool ul {
-        padding: 0px;
-        margin: 0px;
-    }
-
-        .viewAllTool ul li {
-            border-bottom: 0;
-        }
-
-.e-settings:before {
-    content: '\e679';
-}
-
-.e-file:before {
-    content: '\ebdc';
-}
-
-.btnGroup {
-    text-align: justify;
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-
-    .btnGroup .btn {
-        width: 100%;
-        background-color: green;
-        border: 0;
-        padding: 10px;
-        color: #fff;
-        font-size: 10px;
-    }
-
-    .btnGroup > .btn {
-        margin-right: 5px;
-    }
-
-.btn.btn-danger {
-    background-color: #ff7070;
-}
-
-.heading {
-    padding: 10px;
-    border-radius: 5px 5px 0px 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-    .heading span:nth-child(2) {
-        background-color: #fff;
-        width: 100%;
-        padding: 4px;
-        border-radius: 2px;
-        margin-left: 6px;
-    }
-
-    .heading.hbg1 {
-        background-color: #e9cf33
-    }
-
-    .heading.hbg2 {
-        background-color: #81c6d3
-    }
-
-    .heading.hbg3 {
-        background-color: #5fdf9e
-    }
-
-    .heading.hbg4 {
-        background-color: #e9865c
-    }
-
-    .heading.hbg5 {
-        background-color: #e697f5
-    }
-
-    .heading.hbg6 {
-        background-color: #dbe75e
-    }
-
-    .heading.hbg7 {
-        background-color: #f191c6
-    }
-
-.tooltip:focus .tooltip-icon, .tooltip:hover .tooltip-icon {
-    color: #383838;
-}
-
-.tooltip:focus ~ .tooltip-content, .tooltip:hover ~ .tooltip-content {
-    display: block;
-    z-index: 0;
-    opacity: 1;
-}
-
-.tooltip-content {
-    position: absolute;
-    top: 160px;
-    right: 60px;
-    transform: translateY(-100%);
-    border: 0.063rem solid #383838;
-    border-radius: 4px;
-    opacity: 1;
-    padding: 0.5rem 1rem;
-}
-
-.tooltip-icon {
-    width: 1.5rem;
-    height: 1.5rem;
-    cursor: help;
-    position: relative;
-    z-index: 1;
-    color: #ff9323;
-    transition: color ease 300ms;
-}
-
-.tooltip-content:after {
-    content: '';
-    position: absolute;
-    right: 0;
-    margin-right: -30px;
-    margin-top: -10px;
-    top: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-    border: 10px solid transparent;
-    border-left-color: #ffffff;
-}
-
-.task_icon img {
-    width: 20px;
-    height: 20px;
-}
-.Approve{
-    background-color: green;
-}
-.Reject{
-    background-color: red;
-}
-.Decline{
-    background-color: yellow;
-}
         </style>
 	</head>
 	<body>
@@ -220,119 +74,145 @@ p {
             <div id="diagram"></div>
         </div>
 		
-		<template id="human-task-template">
-        <div style="background: #f8e991;" class="box">
-            <div class="heading hbg2">
-                <span class="task_icon">aaaas<img src="./images/Human-task.png"></span>
-                <span class="title">${TaskName}</span>
+	<template id="human-task-template">
+        <div class="box human_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Human-task.png"></span>
+                <span class="taskName">${TaskName}</span>
             </div>
-            <ul class="contentList">
-                <li>
-                    <span class="task_icon"><img src="./images/Outcomes.png"></span> ${TaskOutcomes}
-                </li>
-            </ul>
-            <div id="human-task-actions" class="btnGroup">
-
+            <div class="taskBody">
+                <ul class="contentList">
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
             </div>
-        </div>
-    </template>
-	<template id="parall-task-template">
-        <div style="background: #f8e991;" class="box">
-            <div class="heading hbg2">
-                <span class="task_icon"><img src="./images/Human-task.png"></span>
-                <span class="title">${TaskName}</span>
-            </div>
-            <ul class="contentList">
-                <li>
-                    <span class="task_icon"><img src="./images/Outcomes.png"></span> ${TaskOutcomes}
-                </li>
-            </ul>
-            <div id="parall-task-actions" class="btnGroup">
-
-            </div>
+            <div class="btnGroup"></div>
         </div>
     </template>
 
     <template id="transaction-task-template">
-        <div style="background:#96e7f7;" class="box">
-            <div class="heading hbg2">
-                <span class="task_icon"><img src="./images/Human-task.png"></span>
-                <span class="title">${TaskName}</span>
+        <div class="box transaction_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/transaction-task.png"></span>
+                <span class="taskName">${TaskName}</span>
             </div>
-            <ul class="contentList">
-                <li>
-                    <span class="e-icons e-file"></span> CustomerDetailsParam
-                    <p style="text-align:right" id="box"><span class="tooltip">ViewAll</span></p>
-                    <div class="viewAllTool tooltip-content">
-                        <ul>
-                            <li><b>Task Name</b><span>CustomerCreated</span></li>
-                            <li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li>
-                            <li><b>Invode</b><span>AutoCreditCheck</span></li>
-                        </ul>
-                    </div></li>
-                <li>
-                    <span class="task_icon"><img src="./images/Outcomes.png" ></span> ${TaskOutcomes}
-                </li>
-            </ul>
-            <div id="transaction-task-actions" class="btnGroup">
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
 
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
             </div>
-        </div>
-    </template>
-	<template id="decisionTaskNode-task-template">
-        <div style="background:#96e7f7;" class="box">
-            <div class="heading hbg2">
-                <span class="task_icon"><img src="./images/Human-task.png"></span>
-                <span class="title">${TaskName}</span>
-            </div>
-            <ul class="contentList">
-                <li>
-                    <span class="e-icons e-file"></span> CustomerDetailsParam
-                    <p style="text-align:right" id="box"><span class="tooltip">ViewAll</span></p>
-                    <div class="viewAllTool tooltip-content">
-                        <ul>
-                            <li><b>Task Name</b><span>CustomerCreated</span></li>
-                            <li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li>
-                            <li><b>Invode</b><span>AutoCreditCheck</span></li>
-                        </ul>
-                    </div></li>
-                <li>
-                    <span class="task_icon"><img src="./images/Outcomes.png" ></span> ${TaskOutcomes}
-                </li>
-            </ul>
-            <div id="decisionTaskNode-task-actions" class="btnGroup">
-
-            </div>
+            <div class="btnGroup"></div>
         </div>
     </template>
 
-    <template id="business-rule-task-template">
-        <div style="background: #96f7c5;" class="box">
-            <div class="heading hbg2">
-                <span class="task_icon"><img src="./images/Human-task.png"></span> 
-                <span class="title">${TaskName}</span>
+    <template id="entityapi-task-template">
+        <div class="box entityapi_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Entity-API.png"></span>
+                <span class="taskName">${TaskName}</span>
             </div>
-            <ul class="contentList">
-                <li>
-                    <span class="e-icons e-file"></span> CustomerDetailsParam
-                    <p style="text-align:right" id="box"><span class="tooltip">ViewAll</span></p>
-                    <div class="viewAllTool tooltip-content">
-                        <ul>
-                            <li><b>Task Name</b><span>CustomerCreated</span></li>
-                            <li><b>Expression</b><span>e.CustomerID!=null && </br>e.CustomerStatus==CREATED</span></li>
-                            <li><b>Invode</b><span>AutoCreditCheck</span></li>
-                        </ul>
-                    </div>
-                </li>
-                <li>
-                    <span class="task_icon"><img src="./images/Outcomes.png"></span> ${TaskOutcomes}
-                </li>
-            </ul>
-            <div id="business-task-actions" class="btnGroup">
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
 
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
             </div>
+            <div class="btnGroup"></div>
         </div>
     </template>
+
+    <template id="businessrule-task-template">
+        <div class="box business_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Business-Rule-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    <template id="parallel-task-template">
+        <div class="box parallel_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Parallel-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    <template id="component-task-template">
+        <div class="box component_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Component-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+
+    <template id="decision-task-template">
+        <div class="box decision_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Component-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    
     </div>
 </div>
 		<script src="index.js" type="text/javascript"></script>
