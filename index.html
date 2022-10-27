@@ -199,6 +199,15 @@ p {
     width: 20px;
     height: 20px;
 }
+.Approve{
+    background-color: green;
+}
+.Reject{
+    background-color: red;
+}
+.Decline{
+    background-color: yellow;
+}
         </style>
 	</head>
 	<body>
@@ -214,7 +223,7 @@ p {
 		<template id="human-task-template">
         <div style="background: #f8e991;" class="box">
             <div class="heading hbg2">
-                <span class="task_icon"><img src="./images/Human-task.png"></span>
+                <span class="task_icon">aaaas<img src="./images/Human-task.png"></span>
                 <span class="title">${TaskName}</span>
             </div>
             <ul class="contentList">
@@ -238,7 +247,7 @@ p {
                     <span class="task_icon"><img src="./images/Outcomes.png"></span> ${TaskOutcomes}
                 </li>
             </ul>
-            <div id="human-task-actions" class="btnGroup">
+            <div id="parall-task-actions" class="btnGroup">
 
             </div>
         </div>
@@ -265,7 +274,7 @@ p {
                     <span class="task_icon"><img src="./images/Outcomes.png" ></span> ${TaskOutcomes}
                 </li>
             </ul>
-            <div id="human-task-actions" class="btnGroup">
+            <div id="transaction-task-actions" class="btnGroup">
 
             </div>
         </div>
@@ -291,7 +300,7 @@ p {
                     <span class="task_icon"><img src="./images/Outcomes.png" ></span> ${TaskOutcomes}
                 </li>
             </ul>
-            <div id="human-task-actions" class="btnGroup">
+            <div id="decisionTaskNode-task-actions" class="btnGroup">
 
             </div>
         </div>
@@ -319,7 +328,7 @@ p {
                     <span class="task_icon"><img src="./images/Outcomes.png"></span> ${TaskOutcomes}
                 </li>
             </ul>
-            <div id="human-task-actions" class="btnGroup">
+            <div id="business-task-actions" class="btnGroup">
 
             </div>
         </div>

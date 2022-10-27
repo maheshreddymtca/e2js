@@ -28,12 +28,16 @@ class TaskNode {
 	
     setTaskOutComes(TaskOutcomes){
         this.TaskOutcomes = TaskOutcomes;
+        console.log('toc>>',this.TaskOutcomes);
+
     }
     setTaskData(TaskData){
     }
     setEligibilityRules(setEligibilityRules){
     }
     prepareBaseHTMLContent(content){
+        $($(content).children()[0]).find('.btnGroup')[0].innerHTML = this.TaskOutcomes;
+
         content = content.children[0].outerHTML.replace("${TaskName}", this.TaskName).replace("${TaskOutcomes}", this.TaskOutCome);
         return content;
     }
@@ -51,6 +55,8 @@ class HumanTaskNode extends TaskNode {
         var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
         // ... Do other task specific manipulation 
         //console.log(content);
+        var btnid = $('#human-task-actions');
+
         return content;
     }
 }
@@ -142,14 +148,28 @@ function getTasks() {
 					  }
 					],
 					"TaskOutcomes" : [
-					   {
-						 "ActionName" : "Approve",
-						 "NextTask" : "......" ,
-						 "Expression" : ".....",
-						 "MarkAsComplete" : true,
-						 "TerminateProcess" : true
-					   }
-					]
+                        {
+                          "ActionName" : "Approve",
+                          "NextTask" : "......" ,
+                          "Expression" : ".....",
+                          "MarkAsComplete" : true,
+                          "TerminateProcess" : true
+                        },
+                        {
+                         "ActionName" : "Decline",
+                         "NextTask" : "......" ,
+                         "Expression" : ".....",
+                         "MarkAsComplete" : true,
+                         "TerminateProcess" : true
+                       },
+                        {
+                         "ActionName" : "Reject",
+                         "NextTask" : "......" ,
+                         "Expression" : ".....",
+                         "MarkAsComplete" : true,
+                         "TerminateProcess" : true
+                       }
+                     ]
 				},
 				{
 					"StartTask" : true,
@@ -186,7 +206,14 @@ function getTasks() {
 						 "Expression" : ".....",
 						 "MarkAsComplete" : true,
 						 "TerminateProcess" : true
-					   }
+					   },
+                       {
+                        "ActionName" : "Reject",
+                        "NextTask" : "......" ,
+                        "Expression" : ".....",
+                        "MarkAsComplete" : true,
+                        "TerminateProcess" : true
+                      }
 					]
 				},
 				{
@@ -224,7 +251,21 @@ function getTasks() {
 						 "Expression" : ".....",
 						 "MarkAsComplete" : true,
 						 "TerminateProcess" : true
-					   }
+					   },
+                       {
+                        "ActionName" : "Decline",
+                        "NextTask" : "......" ,
+                        "Expression" : ".....",
+                        "MarkAsComplete" : true,
+                        "TerminateProcess" : true
+                      },
+                       {
+                        "ActionName" : "Reject",
+                        "NextTask" : "......" ,
+                        "Expression" : ".....",
+                        "MarkAsComplete" : true,
+                        "TerminateProcess" : true
+                      }
 					]
 				}
 			]
@@ -232,14 +273,38 @@ function getTasks() {
 	console.log('results',results.TaskConfigDetails)
 	results.WorkflowDefintion.forEach((item, i) => {
 		console.log('>>>',item);
-		if(item.TaskType == "HumanTask"){
+		if(item.TaskInfo.TaskType == "HumanTask"){
 			//var TaskOutCome = new TaskOutCome();
-			tasks.push(new HumanTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription)); 
+            var outcome = item.TaskOutcomes;
+             var btns = '';
+            outcome.forEach(function(outComes){
+                console.log('outComes',outComes.ActionName)
+                btns += '<span class='+outComes.ActionName+'>'+outComes.ActionName+'</span>';
+            });
+            var humartask = new HumanTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+            humartask.setTaskOutComes(btns);
+			tasks.push(humartask); 
 			
-		}else if(item.TaskType == "ParallelTask"){
-			tasks.push(new ParallelTaskNode(item.TaskName, item.TaskType, item.Description, null)); 
-		}else if(item.TaskType == "DecisionTask"){
-			tasks.push(new DecisionTaskNode(item.TaskName, item.TaskType, item.Description, null)); 
+		}else if(item.TaskInfo.TaskType == "ParallelTask"){
+            var outcome = item.TaskOutcomes;
+             var btns = '';
+            outcome.forEach(function(outComes){
+                console.log('outComes',outComes.ActionName)
+                btns += '<span class="'+outComes.ActionName+' btn">'+outComes.ActionName+'</span>';
+            });
+			var ParallelTask = new ParallelTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+            ParallelTask.setTaskOutComes(btns);
+            tasks.push(ParallelTask); 
+		}else if(item.TaskInfo.TaskType == "DecisionTask"){
+            var outcome = item.TaskOutcomes;
+            var btns = '';
+           outcome.forEach(function(outComes){
+               console.log('outComes',outComes.ActionName)
+               btns += '<span class='+outComes.ActionName+'>'+outComes.ActionName+'</span>';
+           });
+           var DecisionTask = new DecisionTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+           DecisionTask.setTaskOutComes(btns);
+            tasks.push(DecisionTask); 
 		}
 		
 	})
@@ -265,7 +330,7 @@ function getTasks() {
 			x = x + 300;
 			data.offsetY = y;
 		}	
-		data.TEMPLATE_ID = tasks.TEMPLATE_ID;
+		//data.TEMPLATE_ID = tasks.TEMPLATE_ID;
 		data.Description = tasks.Description;
 		data.TaskName = tasks.TaskName;
 		data.TaskType = tasks.TaskType;
@@ -517,7 +582,7 @@ function Createnode(data) {
     var diagram = new ej.diagrams.Diagram({
         width: '100%',
         height: '1000px',
-        nodes: data,
+        nodes: newData.nodes,
         connectors: connectors,
         constraints: ej.diagrams.DiagramConstraints.Default | (ej.diagrams.DiagramConstraints.Bridging | ej.diagrams.DiagramConstraints.LineRouting),
         snapSettings: { constraints: ej.diagrams.SnapConstraints.None },
