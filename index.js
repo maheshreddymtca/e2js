@@ -61,8 +61,73 @@ class HumanTaskNode extends TaskNode {
     }
 }
 
+class TransactionTaskNode extends TaskNode {
+    TEMPLATE_ID = "#transaction-task-template";
+
+    constructor(TaskName, TaskType, Description)
+    {
+        super(TaskName, TaskType, Description);      
+    }
+    getHTMLContent() {
+        var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+        // .. DO Task specific manipulation
+        //console.log(content);
+        return content;
+    }
+}
+
+class EntityApiTaskNode extends TaskNode {
+    TEMPLATE_ID = "#entityapi-task-template";
+
+    constructor(TaskName, TaskType, Description)
+    {
+        super(TaskName, TaskType, Description);      
+    }
+    getHTMLContent() {
+        var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+        // .. DO Task specific manipulation
+        //console.log(content);
+        return content;
+    }
+}
+
+class BusinessRuleTaskNode extends TaskNode {
+    TEMPLATE_ID = "#businessrule-task-template";
+
+    constructor(TaskName, TaskType, Description)
+    {
+        super(TaskName, TaskType, Description);      
+    }
+    getHTMLContent() {
+        var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+        // .. DO Task specific manipulation
+        //console.log(content);
+        return content;
+    }
+}
+
 class ParallelTaskNode extends TaskNode {
-    TEMPLATE_ID = "#parall-task-template";
+    TEMPLATE_ID = "#parallel-task-template";
+
+    constructor(TaskName, TaskType, Description){
+        super(TaskName, TaskType, Description);
+        
+    }
+    
+    setUIForm(uiform){
+        this.UIForm = uiform;
+    }
+
+    getHTMLContent(){
+        var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+        // ... Do other task specific manipulation 
+        //console.log(content);
+        return content;
+    }
+}
+
+class ComponentTaskNode extends TaskNode {
+    TEMPLATE_ID = "#component-task-template";
 
     constructor(TaskName, TaskType, Description){
         super(TaskName, TaskType, Description);
@@ -82,23 +147,10 @@ class ParallelTaskNode extends TaskNode {
 }
 
 
-class TransactionTaskNode extends TaskNode {
-    TEMPLATE_ID = "#transaction-task-template";
 
-    constructor(TaskName, TaskType, Description)
-    {
-        super(TaskName, TaskType, Description);      
-    }
-    getHTMLContent() {
-        var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
-        // .. DO Task specific manipulation
-        //console.log(content);
-        return content;
-    }
-}
 
 class DecisionTaskNode extends TaskNode {
-    TEMPLATE_ID = "#decisionTaskNode-task-template";
+    TEMPLATE_ID = "#decision-task-template";
     constructor(TaskName, TaskType, Description)
     {
         super(TaskName, TaskType, Description);   
@@ -117,159 +169,360 @@ function getTasks() {
     //Initializes the nodes for the diagram
     var tasks =  [] ;
 	var results = {
-		"WorkflowDefintion" : 
-			[
-				{
-					"StartTask" : true,
-					"TaskInfo":{
-						"TaskName": "DataEntry",
-						"TaskType" : "HumanTask",
-						"TaskDescription" : "....",
-						"AdditionalInfo": {
-							"UIForm" : "" ,
-							"TransactionName" : "",
-							"EntityName" : " ",
-							"EntityActionName" : "",
-							"ComponentName" : " " ,
-							"DecisionTableName" : " "
-						}
-					},
-					"TaskEligibilityRules" : [
-						{
-							"Name": "xxxx",
-							"Expresison": "...."
-						}
-					],
-				   "Dependencies" :[
-					  "task1", "task2" ],
-				   "EntityRules" :[
-					  {
-						"FieldInputRules" : [ "Rule1","Rule2" ]
-					  }
-					],
-					"TaskOutcomes" : [
-                        {
-                          "ActionName" : "Approve",
-                          "NextTask" : "......" ,
-                          "Expression" : ".....",
-                          "MarkAsComplete" : true,
-                          "TerminateProcess" : true
-                        },
-                        {
-                         "ActionName" : "Decline",
-                         "NextTask" : "......" ,
-                         "Expression" : ".....",
-                         "MarkAsComplete" : true,
-                         "TerminateProcess" : true
-                       },
-                        {
-                         "ActionName" : "Reject",
-                         "NextTask" : "......" ,
-                         "Expression" : ".....",
-                         "MarkAsComplete" : true,
-                         "TerminateProcess" : true
-                       }
-                     ]
-				},
-				{
-					"StartTask" : true,
-					"TaskInfo":{
-						"TaskName": "SubmitForFinalApprovalParallel",
-						"TaskType" : "ParallelTask",
-						"TaskDescription" : "Submit For Final Approval",
-						"AdditionalInfo": {
-							"UIForm" : "" ,
-							"TransactionName" : "",
-							"EntityName" : " ",
-							"EntityActionName" : "",
-							"ComponentName" : " " ,
-							"DecisionTableName" : " "
-						}
-					},
-					"TaskEligibilityRules" : [
-						{
-							"Name": "xxxx",
-							"Expresison": "...."
-						}
-					],
-				   "Dependencies" :[
-					  "task1", "task2" ],
-				   "EntityRules" :[
-					  {
-						"FieldInputRules" : [ "Rule1","Rule2" ]
-					  }
-					],
-					"TaskOutcomes" : [
-					   {
-						 "ActionName" : "Approve",
-						 "NextTask" : "......" ,
-						 "Expression" : ".....",
-						 "MarkAsComplete" : true,
-						 "TerminateProcess" : true
-					   },
-                       {
-                        "ActionName" : "Reject",
-                        "NextTask" : "......" ,
-                        "Expression" : ".....",
-                        "MarkAsComplete" : true,
-                        "TerminateProcess" : true
-                      }
-					]
-				},
-				{
-					"StartTask" : true,
-					"TaskInfo":{
-						"TaskName": "GenerateDocumentDescisionFlow",
-						"TaskType" : "DecisionTask",
-						"TaskDescription" : "Generate Document Descision",
-						"AdditionalInfo": {
-							"UIForm" : "" ,
-							"TransactionName" : "",
-							"EntityName" : " ",
-							"EntityActionName" : "",
-							"ComponentName" : " " ,
-							"DecisionTableName" : " "
-						}
-					},
-					"TaskEligibilityRules" : [
-						{
-							"Name": "xxxx",
-							"Expresison": "...."
-						}
-					],
-				   "Dependencies" :[
-					  "task1", "task2" ],
-				   "EntityRules" :[
-					  {
-						"FieldInputRules" : [ "Rule1","Rule2" ]
-					  }
-					],
-					"TaskOutcomes" : [
-					   {
-						 "ActionName" : "Approve",
-						 "NextTask" : "......" ,
-						 "Expression" : ".....",
-						 "MarkAsComplete" : true,
-						 "TerminateProcess" : true
-					   },
-                       {
-                        "ActionName" : "Decline",
-                        "NextTask" : "......" ,
-                        "Expression" : ".....",
-                        "MarkAsComplete" : true,
-                        "TerminateProcess" : true
-                      },
-                       {
-                        "ActionName" : "Reject",
-                        "NextTask" : "......" ,
-                        "Expression" : ".....",
-                        "MarkAsComplete" : true,
-                        "TerminateProcess" : true
-                      }
-					]
-				}
-			]
-		}
+  "WorkflowDefintion": [
+    {
+      "StartTask": true,
+      "TaskInfo": {
+        "TaskName": "DataEntry",
+        "TaskType": "HumanTask",
+        "TaskDescription": "....",
+        "AdditionalInfo": {
+          "UIForm": "",
+          "TransactionName": "",
+          "EntityName": " ",
+          "EntityActionName": "",
+          "ComponentName": " ",
+          "DecisionTableName": " "
+        }
+      },
+      "TaskEligibilityRules": [
+        {
+          "Name": "xxxx",
+          "Expresison": "...."
+        }
+      ],
+      "Dependencies": [
+        "task1",
+        "task2"
+      ],
+      "EntityRules": [
+        {
+          "FieldInputRules": [
+            "Rule1",
+            "Rule2"
+          ]
+        }
+      ],
+      "TaskOutcomes": [
+        {
+          "ActionName": "Approve",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        }
+      ]
+    },
+    {
+      "StartTask": true,
+      "TaskInfo": {
+        "TaskName": "Transaction",
+        "TaskType": "TransactionTask",
+        "TaskDescription": "Transaction Task Description",
+        "AdditionalInfo": {
+          "UIForm": "",
+          "TransactionName": "",
+          "EntityName": " ",
+          "EntityActionName": "",
+          "ComponentName": " ",
+          "DecisionTableName": " "
+        }
+      },
+      "TaskEligibilityRules": [
+        {
+          "Name": "xxxx",
+          "Expresison": "...."
+        }
+      ],
+      "Dependencies": [
+        "task1",
+        "task2"
+      ],
+      "EntityRules": [
+        {
+          "FieldInputRules": [
+            "Rule1",
+            "Rule2"
+          ]
+        }
+      ],
+      "TaskOutcomes": [
+        {
+          "ActionName": "Approve",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        },
+        {
+          "ActionName": "Decline",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        },
+        {
+          "ActionName": "Refer",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        },
+        {
+          "ActionName": "Other",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        }
+      ]
+    },
+    {
+      "StartTask": true,
+      "TaskInfo": {
+        "TaskName": "Entity API ",
+        "TaskType": "EntityApiTask",
+        "TaskDescription": "EntityApiTask Description",
+        "AdditionalInfo": {
+          "UIForm": "",
+          "TransactionName": "",
+          "EntityName": " ",
+          "EntityActionName": "",
+          "ComponentName": " ",
+          "DecisionTableName": " "
+        }
+      },
+      "TaskEligibilityRules": [
+        {
+          "Name": "xxxx",
+          "Expresison": "...."
+        }
+      ],
+      "Dependencies": [
+        "task1",
+        "task2"
+      ],
+      "EntityRules": [
+        {
+          "FieldInputRules": [
+            "Rule1",
+            "Rule2"
+          ]
+        }
+      ],
+      "TaskOutcomes": [
+        {
+          "ActionName": "Refer",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        },
+        {
+          "ActionName": "Other",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        }
+      ]
+    },
+    {
+      "StartTask": true,
+      "TaskInfo": {
+        "TaskName": "Business Rule",
+        "TaskType": "BusinessRuleTask",
+        "TaskDescription": "Business Rule Task Description",
+        "AdditionalInfo": {
+          "UIForm": "",
+          "TransactionName": "",
+          "EntityName": " ",
+          "EntityActionName": "",
+          "ComponentName": " ",
+          "DecisionTableName": " "
+        }
+      },
+      "TaskEligibilityRules": [
+        {
+          "Name": "xxxx",
+          "Expresison": "...."
+        }
+      ],
+      "Dependencies": [
+        "task1",
+        "task2"
+      ],
+      "EntityRules": [
+        {
+          "FieldInputRules": [
+            "Rule1",
+            "Rule2"
+          ]
+        }
+      ],
+      "TaskOutcomes": [
+        {
+          "ActionName": "Approve",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        },
+        {
+          "ActionName": "Decline",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        }
+      ]
+    },
+    {
+      "StartTask": true,
+      "TaskInfo": {
+        "TaskName": "Parallel",
+        "TaskType": "ParallelTask",
+        "TaskDescription": "Submit For Final Approval",
+        "AdditionalInfo": {
+          "UIForm": "",
+          "TransactionName": "",
+          "EntityName": " ",
+          "EntityActionName": "",
+          "ComponentName": " ",
+          "DecisionTableName": " "
+        }
+      },
+      "TaskEligibilityRules": [
+        {
+          "Name": "xxxx",
+          "Expresison": "...."
+        }
+      ],
+      "Dependencies": [
+        "task1",
+        "task2"
+      ],
+      "EntityRules": [
+        {
+          "FieldInputRules": [
+            "Rule1",
+            "Rule2"
+          ]
+        }
+      ],
+      "TaskOutcomes": [
+        {
+          "ActionName": "Approve",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        },
+        {
+          "ActionName": "Reject",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        }
+      ]
+    },
+    {
+      "StartTask": true,
+      "TaskInfo": {
+        "TaskName": "Component",
+        "TaskType": "ComponentTask",
+        "TaskDescription": "ComponentTask Description",
+        "AdditionalInfo": {
+          "UIForm": "",
+          "TransactionName": "",
+          "EntityName": " ",
+          "EntityActionName": "",
+          "ComponentName": " ",
+          "DecisionTableName": " "
+        }
+      },
+      "TaskEligibilityRules": [
+        {
+          "Name": "xxxx",
+          "Expresison": "...."
+        }
+      ],
+      "Dependencies": [
+        "task1",
+        "task2"
+      ],
+      "EntityRules": [
+        {
+          "FieldInputRules": [
+            "Rule1",
+            "Rule2"
+          ]
+        }
+      ],
+      "TaskOutcomes": [
+        {
+          "ActionName": "Approve",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        }
+      ]
+    },
+    {
+      "StartTask": true,
+      "TaskInfo": {
+        "TaskName": "DescisionFlow",
+        "TaskType": "DecisionTask",
+        "TaskDescription": "Generate Document Descision",
+        "AdditionalInfo": {
+          "UIForm": "",
+          "TransactionName": "",
+          "EntityName": " ",
+          "EntityActionName": "",
+          "ComponentName": " ",
+          "DecisionTableName": " "
+        }
+      },
+      "TaskEligibilityRules": [
+        {
+          "Name": "xxxx",
+          "Expresison": "...."
+        }
+      ],
+      "Dependencies": [
+        "task1",
+        "task2"
+      ],
+      "EntityRules": [
+        {
+          "FieldInputRules": [
+            "Rule1",
+            "Rule2"
+          ]
+        }
+      ],
+      "TaskOutcomes": [
+        {
+          "ActionName": "Approve",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        },
+        
+        {
+          "ActionName": "Refer",
+          "NextTask": "......",
+          "Expression": ".....",
+          "MarkAsComplete": true,
+          "TerminateProcess": true
+        }
+      ]
+    }
+  ]
+}
 	console.log('results',results.TaskConfigDetails)
 	results.WorkflowDefintion.forEach((item, i) => {
 		console.log('>>>',item);
@@ -279,12 +532,42 @@ function getTasks() {
              var btns = '';
             outcome.forEach(function(outComes){
                 console.log('outComes',outComes.ActionName)
-                btns += '<span class='+outComes.ActionName+'>'+outComes.ActionName+'</span>';
+                btns += '<span class="'+outComes.ActionName+' btn">'+outComes.ActionName+'</span>';
             });
-            var humartask = new HumanTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
-            humartask.setTaskOutComes(btns);
-			tasks.push(humartask); 
+            var HumanTask = new HumanTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+            HumanTask.setTaskOutComes(btns);
+			tasks.push(HumanTask); 
 			
+		}else if(item.TaskInfo.TaskType == "TransactionTask"){
+            var outcome = item.TaskOutcomes;
+             var btns = '';
+            outcome.forEach(function(outComes){
+                console.log('outComes',outComes.ActionName)
+                btns += '<span class="'+outComes.ActionName+' btn">'+outComes.ActionName+'</span>';
+            });
+			var TransactionTask = new TransactionTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+            TransactionTask.setTaskOutComes(btns);
+            tasks.push(TransactionTask); 
+		}else if(item.TaskInfo.TaskType == "EntityApiTask"){
+            var outcome = item.TaskOutcomes;
+             var btns = '';
+            outcome.forEach(function(outComes){
+                console.log('outComes',outComes.ActionName)
+                btns += '<span class="'+outComes.ActionName+' btn">'+outComes.ActionName+'</span>';
+            });
+			var EntityApiTask = new EntityApiTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+            EntityApiTask.setTaskOutComes(btns);
+            tasks.push(EntityApiTask); 
+		}else if(item.TaskInfo.TaskType == "BusinessRuleTask"){
+            var outcome = item.TaskOutcomes;
+             var btns = '';
+            outcome.forEach(function(outComes){
+                console.log('outComes',outComes.ActionName)
+                btns += '<span class="'+outComes.ActionName+' btn">'+outComes.ActionName+'</span>';
+            });
+			var BusinessRuleTask = new BusinessRuleTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+            BusinessRuleTask.setTaskOutComes(btns);
+            tasks.push(BusinessRuleTask); 
 		}else if(item.TaskInfo.TaskType == "ParallelTask"){
             var outcome = item.TaskOutcomes;
              var btns = '';
@@ -295,12 +578,22 @@ function getTasks() {
 			var ParallelTask = new ParallelTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
             ParallelTask.setTaskOutComes(btns);
             tasks.push(ParallelTask); 
+		}else if(item.TaskInfo.TaskType == "ComponentTask"){
+            var outcome = item.TaskOutcomes;
+            var btns = '';
+           outcome.forEach(function(outComes){
+               console.log('outComes',outComes.ActionName)
+               btns += '<span class="'+outComes.ActionName+' btn">'+outComes.ActionName+'</span>';
+           });
+           var ComponentTask = new ComponentTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+           ComponentTask.setTaskOutComes(btns);
+            tasks.push(ComponentTask); 
 		}else if(item.TaskInfo.TaskType == "DecisionTask"){
             var outcome = item.TaskOutcomes;
             var btns = '';
            outcome.forEach(function(outComes){
                console.log('outComes',outComes.ActionName)
-               btns += '<span class='+outComes.ActionName+'>'+outComes.ActionName+'</span>';
+               btns += '<span class="'+outComes.ActionName+' btn">'+outComes.ActionName+'</span>';
            });
            var DecisionTask = new DecisionTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
            DecisionTask.setTaskOutComes(btns);
