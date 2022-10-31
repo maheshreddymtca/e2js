@@ -1,0 +1,1277 @@
+@using Lw.Sys.Common.Util
+@using Lw.Sys.Metamodel
+@using Lw.Sys.Web.Mvc.Helpers
+@using Lw.Sys.Web.Mvc.Models
+@model Lw.Sys.Web.Mvc.Models.SectionViewModel<DesignerPanel, IPanelHtmlElementProperties>
+
+    @{
+        var panel = Model.Widget;
+        var htmlElementProperties = Model.HtmlElementProperties;
+        var collapsible = panel.HeaderStyle == Const.Styles.HideTitle || (panel.Title.IsBlank() && panel.TitleKey.IsBlank()) || panel.Style == Const.Styles.NonCollapsible ? "" : Const.Styles.Collapsible;
+        var canPanelCollapse = panel.HeaderStyle == Const.Styles.HideTitle ? "" : "CanCollapse";
+        var collapsedState = htmlElementProperties.IsCollapsed ? Const.Styles.Collapsed : "";
+        //var emptyLabelClass = htmlElementProperties.Label.IsBlank() || panel.HeaderStyle == Const.Styles.HideTitle ? "EmptyLabel" : ";
+    }
+
+    <div class="ProcessDesignerAddPopup" style="display: none">
+        <ul>
+            <li><a class="Title"><span>Add Tasks</span></a></li>
+            <li><a href="#" class="HumanTask" data-id="HumanTask"><img src="../Content/images/Human-task.png"><span style="text-align: center;">Human Task</span></a></li>
+            <li><a href="#" class="TransactionTask" data-id="TransactionTask"><img src="../Content/images/transaction-task.png"><span style="text-align: center;">Transaction Task</span></a></li>
+            <li><a href="#" class="EntityAPI" data-id="EntityApiTask"><img src="../Content/images/Entity-API.png"><span style="text-align: center;">Entity API</span></a></li>
+            <li><a href="#" class="BusinessRuleTask" data-id="BusinessRuleTask"><img src="../Content/images/Business-Rule-Task.png"><span style="text-align: center;">Business Rule Task</span></a></li>
+            <li><a href="#" class="ParallelTask" data-id="ParallelTask"><img src="../Content/images/Parallel-Task.png"><span style="text-align: center;">Parallel Task</span></a></li>
+            <li><a href="#" class="ComponentTask" data-id="ComponentTask"><img src="../Content/images/Component-Task.png"><span style="text-align: center;">Component Task</span></a></li>
+            <li><a href="#" class="DecisionTask" data-id="DecisionTask"><img src="../Content/images/Entity-Rules.png"><span style="text-align: center;">Decision Task</span></a></li>
+        </ul>
+    </div>
+    <div id="@htmlElementProperties.DivId">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="diagram" class="processDesigner">
+                    @*( Mahesh should create the ID dynamically so that it is unique per form )*@
+                </div>
+                <div id="placeholderDiagram" class="placeholderDesigner" style="display:none;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="human-task-template">
+        <div class="box human_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Human-task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    <template id="transaction-task-template">
+        <div class="box transaction_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/transaction-task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    <template id="entityapi-task-template">
+        <div class="box entityapi_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Entity-API.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    <template id="businessrule-task-template">
+        <div class="box business_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Business-Rule-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    <template id="parallel-task-template">
+        <div class="box parallel_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Parallel-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+    <template id="component-task-template">
+        <div class="box component_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Component-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+
+    <template id="decision-task-template">
+        <div class="box decision_task">
+            <div class="taskHeader">
+                <span class="task_icon"><img src="./Content/images/Component-Task.png"></span>
+                <span class="taskName">${TaskName}</span>
+            </div>
+            <div class="taskBody">
+                <ul class="contentList">
+                    <li>
+
+                    </li>
+                </ul>
+                <div class="taskOutcomes">
+                    <span class="task_icon"><img src="./Content/images/Outcomes.png"></span> Task Outcomes
+                </div>
+            </div>
+            <div class="btnGroup"></div>
+        </div>
+    </template>
+
+===========================
+function prepareDesigner(context) {
+
+    var currentForm = $(context).closest("form")
+    var currentFormId = $(currentForm).attr("id");
+
+    var quickActionWrapper = $(context).find('.QuickActionWrapper');
+
+    quickActionWrapper.find('.TriggerFormAdd,.CloseDialog').on('mousedown', function () {
+        toggleProcessDesignerMenu(currentForm);
+        return false;
+    });
+    // ma Code
+    var currentForm = $(context).closest("form");
+    /*function ProcessTest(currentForm) {
+        var currentFormId = $(currentForm).attr("id");
+        var actionUrl = "ProcessDesigner/TransactionToJSON?__SESSIONKEY=" + currentFormId;
+        var results;
+        __doPost(false, actionUrl, { __RequestVerificationToken: $(currentForm).find('[name="' + LwGlobals.antiForgeryTokenPrefix + '"]').val() }, function (returnData) {
+            results = JSON.parse(returnData);
+            console.log('results>>>', results)
+        }, 'JSON');
+    }
+    ProcessTest(currentForm);
+    var results = {
+        "TransactionConfig": 0,
+        "TaskConfigDetails": [
+            {
+                "TaskType": "HumanTask",
+                "TaskName": "Data Gathering",
+                "Description": "Lease Data Gathering Step",
+                "TaskConfigEligibilityRules": [
+                    {
+                        "Name": "Rule 1",
+                        "Expression": "e.Id"
+                    }
+                ],
+                "TaskConfigDependencies": [
+                    {
+                        "Name": "Dep 1"
+                    }
+                ],
+                "TaskConfigTaskOutcomes": [
+                    {
+                        "Name": "SubmitForFinalApprovalParallel",
+                        "Task": {
+                            "TaskType": "ParallelTask",
+                            "TaskName": "SubmitForFinalApprovalParallel",
+                            "Description": "Submit For Final Approval"
+                        }
+                    },
+                    {
+                        "Name": "GenerateDocumentDescisionFlow",
+                        "Task": {
+                            "TaskType": "DecisionTask",
+                            "TaskName": "GenerateDocumentDescisionFlow",
+                            "Description": "Generate Document Descision"
+                        }
+                    }
+                ]
+            },
+            {
+                "TaskType": "ParallelTask",
+                "TaskName": "SubmitForFinalApprovalParallel",
+                "Description": "Submit For Final Approval"
+            },
+            {
+                "TaskType": "DecisionTask",
+                "TaskName": "GenerateDocumentDescisionFlow",
+                "Description": "Generate Document Descision"
+            }
+        ]
+    }
+    var res = results.TaskConfigDetails;*/
+    var results = {
+        "WorkflowDefintion": [
+            {
+                "StartTask": true,
+                "TaskInfo": {
+                    "TaskName": "DataEntry",
+                    "TaskType": "HumanTask",
+                    "TaskDescription": "....",
+                    "AdditionalInfo": {
+                        "UIForm": "form1 ",
+                        "TransactionName": "",
+                        "EntityName": " ",
+                        "EntityActionName": "",
+                        "ComponentName": " ",
+                        "DecisionTableName": " "
+                    }
+                },
+                "TaskEligibilityRules": "rule1",
+                "Dependencies": [
+                    "task1",
+                    "task2"
+                ],
+                "EntityRules": [
+                    {
+                        "FieldInputRules": [
+                            "Rule1",
+                            "Rule2",
+                            "Rule3"
+                        ]
+                    }
+                ],
+                "TaskOutcomes": [
+                    {
+                        "ActionName": "Approve",
+                        "NextTask": "TransactionTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    }
+                ]
+            },
+            {
+                "StartTask": false,
+                "TaskInfo": {
+                    "TaskName": "Transaction",
+                    "TaskType": "TransactionTask",
+                    "TaskDescription": "Transaction Task Description",
+                    "AdditionalInfo": {
+                        "UIForm": "",
+                        "TransactionName": "",
+                        "EntityName": " ",
+                        "EntityActionName": "",
+                        "ComponentName": " ",
+                        "DecisionTableName": " "
+                    }
+                },
+                "TaskEligibilityRules": [
+                    {
+                        "Name": "xxxx",
+                        "Expresison": "...."
+                    }
+                ],
+                "Dependencies": [
+                    "task1",
+                    "task2"
+                ],
+                "EntityRules": [
+                    {
+                        "FieldInputRules": [
+                            "Rule1",
+                            "Rule2"
+                        ]
+                    }
+                ],
+                "TaskOutcomes": [
+                    {
+                        "ActionName": "Approve",
+                        "NextTask": "EntityApiTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    },
+                    {
+                        "ActionName": "Decline",
+                        "NextTask": "EntityApiTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    },
+                    {
+                        "ActionName": "Refer",
+                        "NextTask": "EntityApiTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    },
+                    {
+                        "ActionName": "Other",
+                        "NextTask": "EntityApiTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    }
+                ]
+            },
+            {
+                "StartTask": false,
+                "TaskInfo": {
+                    "TaskName": "Entity API ",
+                    "TaskType": "EntityApiTask",
+                    "TaskDescription": "EntityApiTask Description",
+                    "AdditionalInfo": {
+                        "UIForm": "",
+                        "TransactionName": "",
+                        "EntityName": " ",
+                        "EntityActionName": "",
+                        "ComponentName": " ",
+                        "DecisionTableName": " "
+                    }
+                },
+                "TaskEligibilityRules": [
+                    {
+                        "Name": "xxxx",
+                        "Expresison": "...."
+                    }
+                ],
+                "Dependencies": [
+                    "task1",
+                    "task2"
+                ],
+                "EntityRules": [
+                    {
+                        "FieldInputRules": [
+                            "Rule1",
+                            "Rule2"
+                        ]
+                    }
+                ],
+                "TaskOutcomes": [
+                    {
+                        "ActionName": "Refer",
+                        "NextTask": "BusinessRuleTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    },
+                    {
+                        "ActionName": "Other",
+                        "NextTask": "BusinessRuleTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    }
+                ]
+            },
+            {
+                "StartTask": false,
+                "TaskInfo": {
+                    "TaskName": "Business Rule",
+                    "TaskType": "BusinessRuleTask",
+                    "TaskDescription": "Business Rule Task Description",
+                    "AdditionalInfo": {
+                        "UIForm": "",
+                        "TransactionName": "",
+                        "EntityName": " ",
+                        "EntityActionName": "",
+                        "ComponentName": " ",
+                        "DecisionTableName": " "
+                    }
+                },
+                "TaskEligibilityRules": [
+                    {
+                        "Name": "xxxx",
+                        "Expresison": "...."
+                    }
+                ],
+                "Dependencies": [
+                    "task1",
+                    "task2"
+                ],
+                "EntityRules": [
+                    {
+                        "FieldInputRules": [
+                            "Rule1",
+                            "Rule2"
+                        ]
+                    }
+                ],
+                "TaskOutcomes": [
+                    {
+                        "ActionName": "Approve",
+                        "NextTask": "ParallelTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    },
+                    {
+                        "ActionName": "Decline",
+                        "NextTask": "ParallelTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    }
+                ]
+            },
+            {
+                "StartTask": false,
+                "TaskInfo": {
+                    "TaskName": "Parallel",
+                    "TaskType": "ParallelTask",
+                    "TaskDescription": "Submit For Final Approval",
+                    "AdditionalInfo": {
+                        "UIForm": "",
+                        "TransactionName": "",
+                        "EntityName": " ",
+                        "EntityActionName": "",
+                        "ComponentName": " ",
+                        "DecisionTableName": " "
+                    }
+                },
+                "TaskEligibilityRules": [
+                    {
+                        "Name": "xxxx",
+                        "Expresison": "...."
+                    }
+                ],
+                "Dependencies": [
+                    "task1",
+                    "task2"
+                ],
+                "EntityRules": [
+                    {
+                        "FieldInputRules": [
+                            "Rule1",
+                            "Rule2"
+                        ]
+                    }
+                ],
+                "TaskOutcomes": [
+                    {
+                        "ActionName": "Approve",
+                        "NextTask": "ComponentTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    },
+                    {
+                        "ActionName": "Reject",
+                        "NextTask": "ComponentTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    }
+                ]
+            },
+            {
+                "StartTask": false,
+                "TaskInfo": {
+                    "TaskName": "Component",
+                    "TaskType": "ComponentTask",
+                    "TaskDescription": "ComponentTask Description",
+                    "AdditionalInfo": {
+                        "UIForm": "",
+                        "TransactionName": "",
+                        "EntityName": " ",
+                        "EntityActionName": "",
+                        "ComponentName": " ",
+                        "DecisionTableName": " "
+                    }
+                },
+                "TaskEligibilityRules": [
+                    {
+                        "Name": "xxxx",
+                        "Expresison": "...."
+                    }
+                ],
+                "Dependencies": [
+                    "task1",
+                    "task2"
+                ],
+                "EntityRules": [
+                    {
+                        "FieldInputRules": [
+                            "Rule1",
+                            "Rule2"
+                        ]
+                    }
+                ],
+                "TaskOutcomes": [
+                    {
+                        "ActionName": "Approve",
+                        "NextTask": "DecisionTask",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    }
+                ]
+            },
+            {
+                "StartTask": false,
+                "TaskInfo": {
+                    "TaskName": "DescisionFlow",
+                    "TaskType": "DecisionTask",
+                    "TaskDescription": "Generate Document Descision",
+                    "AdditionalInfo": {
+                        "UIForm": "",
+                        "TransactionName": "",
+                        "EntityName": " ",
+                        "EntityActionName": "",
+                        "ComponentName": " ",
+                        "DecisionTableName": " "
+                    }
+                },
+                "TaskEligibilityRules": [
+                    {
+                        "Name": "xxxx",
+                        "Expresison": "...."
+                    }
+                ],
+                "Dependencies": [
+                    "task1",
+                    "task2"
+                ],
+                "EntityRules": [
+                    {
+                        "FieldInputRules": [
+                            "Rule1",
+                            "Rule2"
+                        ]
+                    }
+                ],
+                "TaskOutcomes": [
+                    {
+                        "ActionName": "Approve",
+                        "NextTask": "",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    },
+
+                    {
+                        "ActionName": "Refer",
+                        "NextTask": "",
+                        "Expression": ".....",
+                        "MarkAsComplete": true,
+                        "TerminateProcess": true
+                    }
+                ]
+            }
+        ]
+    }
+    var diagram = '';
+    function prepareDiagram() {
+        class TaskOutCome {
+            constructor(OutcomeName, OutcomeExpression, NextTask) {
+                this.OutcomeName = OutcomeName;
+                this.OutcomeExpression = OutcomeExpression;
+                this.NextTask = NextTask;
+            }
+        }
+        class TaskNode {
+            constructor(TaskName, TaskType, Description) {
+                this.TaskName = TaskName;
+                this.TaskType = TaskType;
+                this.Description = Description;
+            }
+            setTaskOutComes(TaskOutcomes) {
+                this.TaskOutcomes = TaskOutcomes;
+            }
+            setTaskData(TaskData) {
+            }
+            setEligibilityRules(setEligibilityRules) {
+            }
+            prepareBaseHTMLContent(content) {
+                $($(content).children()[0]).find('.btnGroup')[0].innerHTML = (this.TaskOutcomes == undefined ? ' ' : this.TaskOutcomes);
+                content = content.children[0].outerHTML.replace("${TaskName}", this.TaskName).replace("${TaskOutcomes}", this.TaskOutCome);
+                return content;
+            }
+        }
+
+        class HumanTaskNode extends TaskNode {
+            TEMPLATE_ID = "#human-task-template";
+            constructor(TaskName, TaskType, Description) {
+                super(TaskName, TaskType, Description);
+            }
+            setUIForm(uiform) {
+                this.UIForm = uiform;
+            }
+            getHTMLContent() {
+                var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+                // ... Do other task specific manipulation 
+                //console.log(content);
+                var btnid = $('#human-task-actions');
+                return content;
+            }
+        }
+
+        class TransactionTaskNode extends TaskNode {
+            TEMPLATE_ID = "#transaction-task-template";
+            constructor(TaskName, TaskType, Description) {
+                super(TaskName, TaskType, Description);
+            }
+            getHTMLContent() {
+                var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+                // .. DO Task specific manipulation
+                //console.log(content);
+                return content;
+            }
+        }
+
+        class EntityApiTaskNode extends TaskNode {
+            TEMPLATE_ID = "#entityapi-task-template";
+            constructor(TaskName, TaskType, Description) {
+                super(TaskName, TaskType, Description);
+            }
+            getHTMLContent() {
+                var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+                // .. DO Task specific manipulation
+                //console.log(content);
+                return content;
+            }
+        }
+
+        class BusinessRuleTaskNode extends TaskNode {
+            TEMPLATE_ID = "#businessrule-task-template";
+            constructor(TaskName, TaskType, Description) {
+                super(TaskName, TaskType, Description);
+            }
+            getHTMLContent() {
+                var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+                // .. DO Task specific manipulation
+                //console.log(content);
+                return content;
+            }
+        }
+
+        class ParallelTaskNode extends TaskNode {
+            TEMPLATE_ID = "#parallel-task-template";
+            constructor(TaskName, TaskType, Description) {
+                super(TaskName, TaskType, Description);
+            }
+            setUIForm(uiform) {
+                this.UIForm = uiform;
+            }
+            getHTMLContent() {
+                var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+                // ... Do other task specific manipulation 
+                //console.log(content);
+                return content;
+            }
+        }
+
+        class ComponentTaskNode extends TaskNode {
+            TEMPLATE_ID = "#component-task-template";
+            constructor(TaskName, TaskType, Description) {
+                super(TaskName, TaskType, Description);
+            }
+            setUIForm(uiform) {
+                this.UIForm = uiform;
+            }
+            getHTMLContent() {
+                var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+                // ... Do other task specific manipulation 
+                //console.log(content);
+                return content;
+            }
+        }
+
+        class DecisionTaskNode extends TaskNode {
+            TEMPLATE_ID = "#decision-task-template";
+            constructor(TaskName, TaskType, Description) {
+                super(TaskName, TaskType, Description);
+            }
+            getHTMLContent() {
+                var content = super.prepareBaseHTMLContent($(this.TEMPLATE_ID)[0].content);
+                // .. DO Task specific manipulation
+                //console.log(content);
+                return content;
+            }
+        }
+
+        function getTasks() {
+            var bounds = document.getElementById('diagram').getBoundingClientRect();
+            var centerX = bounds.width / 2;
+            //Initializes the nodes for the diagram
+            var tasks = [];
+            console.log('results.WorkflowDefintion>>>>', results.WorkflowDefintion)
+            results.WorkflowDefintion.forEach((item, i) => {
+                if (item.TaskInfo.TaskType == "HumanTask") {
+                    //var TaskOutCome = new TaskOutCome();
+                    var HumanTask = new HumanTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+                    var outcome = item.TaskOutcomes;
+                    if (outcome !== undefined) {
+                        var btns = '';
+                        outcome.forEach(function (outComes) {
+
+                            btns += '<span class="' + outComes.ActionName + ' btn">' + outComes.ActionName + '</span>';
+                        });
+                        HumanTask.setTaskOutComes(btns);
+                    }
+                    tasks.push(HumanTask);
+
+                } else if (item.TaskInfo.TaskType == "TransactionTask") {
+                    var TransactionTask = new TransactionTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+                    var outcome = item.TaskOutcomes;
+                    if (outcome !== undefined) {
+                        var btns = '';
+                        outcome.forEach(function (outComes) {
+
+                            btns += '<span class="' + outComes.ActionName + ' btn">' + outComes.ActionName + '</span>';
+                        });
+                        TransactionTask.setTaskOutComes(btns);
+                    }
+                    tasks.push(TransactionTask);
+                } else if (item.TaskInfo.TaskType == "EntityApiTask") {
+                    var EntityApiTask = new EntityApiTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+                    var outcome = item.TaskOutcomes;
+                    if (outcome !== undefined) {
+                        var btns = '';
+                        outcome.forEach(function (outComes) {
+
+                            btns += '<span class="' + outComes.ActionName + ' btn">' + outComes.ActionName + '</span>';
+                        });
+
+                        EntityApiTask.setTaskOutComes(btns);
+                    }
+                    tasks.push(EntityApiTask);
+                } else if (item.TaskInfo.TaskType == "BusinessRuleTask") {
+                    var BusinessRuleTask = new BusinessRuleTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+                    var outcome = item.TaskOutcomes;
+                    if (outcome !== undefined) {
+                        var btns = '';
+                        outcome.forEach(function (outComes) {
+
+                            btns += '<span class="' + outComes.ActionName + ' btn">' + outComes.ActionName + '</span>';
+                        });
+                        
+                        BusinessRuleTask.setTaskOutComes(btns);
+                    }
+                    tasks.push(BusinessRuleTask);
+                } else if (item.TaskInfo.TaskType == "ParallelTask") {
+                    var ParallelTask = new ParallelTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+                    var outcome = item.TaskOutcomes;
+                    if (outcome !== undefined) {
+                        var btns = '';
+                        outcome.forEach(function (outComes) {
+
+                            btns += '<span class="' + outComes.ActionName + ' btn">' + outComes.ActionName + '</span>';
+                        });
+
+                        ParallelTask.setTaskOutComes(btns);
+                    }
+                    tasks.push(ParallelTask);
+                } else if (item.TaskInfo.TaskType == "ComponentTask") {
+                    var ComponentTask = new ComponentTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+                    var outcome = item.TaskOutcomes;
+                    if (outcome !== undefined) {
+                        var btns = '';
+                        outcome.forEach(function (outComes) {
+
+                            btns += '<span class="' + outComes.ActionName + ' btn">' + outComes.ActionName + '</span>';
+                        });
+                        
+                        ComponentTask.setTaskOutComes(btns);
+                    }
+                    tasks.push(ComponentTask);
+                } else if (item.TaskInfo.TaskType == "DecisionTask") {
+                    var DecisionTask = new DecisionTaskNode(item.TaskInfo.TaskName, item.TaskInfo.TaskType, item.TaskInfo.TaskDescription);
+                    var outcome = item.TaskOutcomes;
+                    if (outcome !== undefined) {
+                        var btns = '';
+                        outcome.forEach(function (outComes) {
+
+                            btns += '<span class="' + outComes.ActionName + ' btn">' + outComes.ActionName + '</span>';
+                        });
+                        
+                        DecisionTask.setTaskOutComes(btns);
+                    }
+                    tasks.push(DecisionTask);
+                }
+
+            })
+
+            var x = -450;
+            var y = 200;
+            const allTaskdata = {};
+            const Data = tasks.map((tasks, index) => {
+                const data = {};
+                var currentIndex = index;
+                if (currentIndex % 4 != 0 || currentIndex == 0) {
+                    data.offsetX = (centerX - 50) + x;
+                    data.offsetY = y;
+                    x = x + 300;
+                } else {
+                    x = -450;
+                    y = y + 300;
+                    data.offsetX = (centerX - 50) + x;
+                    x = x + 300;
+                    data.offsetY = y;
+                }
+                data.id = tasks.TaskType+(index+1);
+                data.Description = tasks.Description;
+                data.TaskName = tasks.TaskName;
+                data.TaskType = tasks.TaskType;
+                const shape = {};
+                shape.type = 'HTML';
+                shape.content = tasks.getHTMLContent();
+                //data.outcomes = taskOutComesArr;
+                data.shape = shape;
+                //nodes.node = data;
+
+                return data;
+            });
+            allTaskdata.nodes = Data;
+            //{ id: "connector1", type: 'Orthogonal', sourceID: 'Start', targetID: 'creatCustomer', sourcePortID: 'port1', targetPortID: 'port2' },
+            const connectorsData = results.WorkflowDefintion.map((tasks, index) => {
+                const data = {};
+                data.id = 'connector' + (index + 1);
+                data.type = 'Orthogonal';
+                data.sourceID = tasks.TaskInfo.TaskType+(index+1);
+                data.targetID = tasks.TaskOutcomes[0].NextTask + (index + 2);
+                data.sourcePortID = 'port' + (index + 1);
+                data.targetPortID = 'port' + (index + 2);
+                return data;
+            });
+            allTaskdata.connectors = connectorsData;
+            return allTaskdata;
+        }
+        var newData = getTasks();
+        console.log('newData', newData)
+
+        ej.diagrams.Diagram.Inject(ej.diagrams.UndoRedo, ej.diagrams.LineRouting, ej.diagrams.ConnectorBridging);
+        function getNodePorts(obj) {
+            return ports = results.WorkflowDefintion.map((tasks, index) => {
+                const data = {};
+                const style = {};
+                const offset = {};
+                data.id = 'port' + (index + 1);
+                data.shape = 'Circle';
+                style.strokeColor = '',
+                style.fill = '';
+                offset.x = 1,
+                offset.y = 0.5;
+                data.style = style;
+                data.offset = offset;
+                return data;
+            });
+        }
+        var bounds = document.getElementById('diagram').getBoundingClientRect();
+        var centerX = bounds.width / 2;
+        var interval = [1, 9, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75, 0.25, 9.75];
+        var gridlines = { lineColor: '#e0e0e0', lineIntervals: interval };
+         diagram = new ej.diagrams.Diagram({
+            width: '100%',
+            height: '1000px',
+            nodes: newData.nodes,
+            connectors: newData.connectors,
+            constraints: ej.diagrams.DiagramConstraints.Default | (ej.diagrams.DiagramConstraints.Bridging | ej.diagrams.DiagramConstraints.LineRouting),
+            snapSettings: { constraints: ej.diagrams.SnapConstraints.None },
+            snapSettings: { horizontalGridlines: gridlines, verticalGridlines: gridlines },
+            layout: {
+                //this prevents connector segments overlapping
+                enableRouting: true,
+                horizontalSpacing: 25,
+                verticalSpacing: 30,
+                horizontalAlignment: 'Left',
+                verticalAlignment: 'Top'
+            },
+            //Sets the default values of a node
+            getNodeDefaults: function (node) {
+                // Disable dragging for node 
+                node.constraints = ej.diagrams.NodeConstraints.Default &~ej.diagrams.NodeConstraints.Drag; 
+                var obj = {};
+                if (obj.width === undefined) {
+                    obj.width = 200;
+                    obj.height = 200;
+                } else {
+                    var ratio = 100 / obj.width;
+                    obj.width = 100;
+                    obj.height *= ratio;
+                }
+                obj.style = { fill: 'red', strokeColor: 'red' };
+                obj.annotations = [{ style: { color: 'green', fill: 'yellow' } }];
+                obj.ports = getNodePorts(node);
+                return obj;
+            },
+            //Sets the default values of a Connector.
+            getConnectorDefaults: function (obj) {
+                // Disable dragging for connector
+                obj.constraints = ej.diagrams.ConnectorConstraints.Default &~(ej.diagrams.ConnectorConstraints.DragSourceEnd | ej.diagrams.ConnectorConstraints.DragTargetEnd);
+            },
+            //enables the bridging constraints for the connector
+            constraints: ej.diagrams.DiagramConstraints.Default | ej.diagrams.DiagramConstraints.Bridging
+        }, '#diagram');       
+    }
+    prepareDiagram();
+    $('body').on('click', '.ProcessDesignerAddPopup ul li a', function (e) {
+        $('#diagram').empty();
+        const addNewTask = {
+            id: 'NewIdea', height: 60, offsetX:  100, offsetY: 200,
+            shape: { type: 'Flow', shape: 'Terminator' },
+            annotations: [{
+                content: 'Place Order'
+            }]
+        };
+        diagram.add(addNewTask);
+        diagram.refresh();
+        console.log('addNewTask>>>', addNewTask);
+        results.WorkflowDefintion.push(addNewTask);
+        console.log('results.WorkflowDefintion>>>>', results.WorkflowDefintion);
+        //prepareDiagram();
+    });
+    // ma Code
+}
+
+function toggleProcessDesignerMenu(form) {
+
+    var $this = $(this);
+
+    var processDesignerAddPopup = $(".ProcessDesignerAddPopup");
+
+    if ($this.attr("aria-expanded") == "true") {
+        $this.attr('aria-expanded', 'false');
+        $(".ProcessDesignerAddPopup").slideToggle();
+    }
+    else {
+        $this.attr('aria-expanded', 'true');
+        $(".ProcessDesignerAddPopup").slideToggle();
+        TrapTabIndex($('.ProcessDesignerAddPopup'), LwGlobals.TabIndex.ApplicableElements.join(','));
+        field = $(".ProcessDesignerAddPopup").find('a').first();/*.trigger('focusin').trigger('focus').attr('autofocus', 'autofocus');*/
+        setFocusAsPerType(field, false);
+
+        processDesignerAddPopup.find('.HumanTask').on('mousedown', function (e) {
+            AddPlaceHolderTask(e);
+            return false;
+        });
+
+        processDesignerAddPopup.find('.TransactionTask').on('mousedown', function (e) {
+            AddPlaceHolderTask(e);
+            return false;
+        });      
+
+        processDesignerAddPopup.find('.EntityAPI').on('click', function (e) {
+            AddPlaceHolderTask(e);
+            return false;
+        });
+
+        processDesignerAddPopup.find('.BusinessRuleTask').on('mousedown', function (e) {
+            AddPlaceHolderTask(e);
+            return false;
+        });
+
+        processDesignerAddPopup.find('.ParallelTask').on('mousedown', function (e) {
+            AddPlaceHolderTask(e);
+            return false;
+        });
+
+        processDesignerAddPopup.find('.ComponentTask').on('mousedown', function (e) {
+            AddPlaceHolderTask(e);
+            return false;
+        });
+
+        processDesignerAddPopup.find('.DecisionTask').on('mousedown', function (e) {
+            AddPlaceHolderTask(e);
+            return false;
+        });
+        }
+}
+
+
+    function AddPlaceHolderTask(event) {
+        /*console.log("Adding Human Task");
+        
+        $('#placeholderDiagram').show();
+        var placeholderData = [
+            {
+                id: 'Start',
+                offsetX: 150,
+                //offsetX: 150, 
+                offsetY: 150,
+                width: 200,
+                height: 200,
+                shape: {
+                    type: 'HTML',
+                    content: '<div style="background:#f8e991;" class="box"><span class="start">Start</span><div class="taskHeader"><span class="e-icons e-settings"></span> <span class="taskName">CreditRequest</span></div><ul class="contentList"><li><span class="e-icons e-file"></span> Task Outcomes</div></li></ul><div class="btnGroup"><button type="button" class="btn">Submit</button></div></div>'
+                }
+            }
+        ];
+        var diagram = new ej.diagrams.Diagram({
+            width: '100%',
+            height: '1000px',
+            nodes: placeholderData,
+        }, '#placeholderDiagram');
+        $('.taskName').text(event.target.textContent);
+        $('.box').removeClass().addClass('box');
+        $('.box').addClass(event.target.className);*/
+    }
+    ==============================
+    p {
+    padding: 0px;
+    margin: 0px;
+}
+
+#box {
+    cursor: pointer;
+}
+
+.box {
+    min-height: 200px;
+    border: 2px solid #c6b96b;
+    border-radius: 5px;
+}
+
+    .box.human_task {
+        background-color: #faea8d;
+    }
+
+    .box.transaction_task {
+        background-color: #8de6fa;
+    }
+
+    .box.entityapi_task {
+        background-color: #bed0f8;
+    }
+
+    .box.business_task {
+        background-color: #fca984;
+    }
+
+    .box.parallel_task {
+        background-color: #f7fdc8;
+    }
+
+    .box.component_task {
+        background-color: #7de9e2;
+    }
+
+    .box.decision_task {
+        background-color: #ddddddb8;
+    }
+
+.human_task .taskHeader {
+    background-color: #e9cf33;
+}
+
+.transaction_task .taskHeader {
+    background-color: #4ed2f0;
+}
+
+.entityapi_task .taskHeader {
+    background-color: #80a1e7;
+}
+
+.business_task .taskHeader {
+    background-color: #e9865c;
+}
+
+.parallel_task .taskHeader {
+    background-color: #ccd685;
+}
+
+.component_task .taskHeader {
+    background-color: #5cc1ba;
+}
+
+.decision_task .taskHeader {
+    background-color: #ddd;
+}
+
+.btnGroup {
+    text-align: justify;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 1px;
+    grid-template-columns: repeat(auto-fit, minmax(94px,1fr));
+}
+
+    .btnGroup .btn {
+        padding: 6px 6px;
+        color: #fff;
+        text-align: center;
+    }
+
+.Approve {
+    background-color: #00c53a;
+}
+
+.Decline, .Reject {
+    background-color: #ff6f6f;
+}
+
+.Refer {
+    background-color: #ff7700;
+}
+
+.Other {
+    background-color: #009dc6;
+}
+
+.taskHeader {
+    padding: 4px 6px;
+    border-radius: 5px 5px 0px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .taskHeader .taskName {
+        background-color: #fff;
+        width: 100%;
+        padding: 4px;
+        border-radius: 2px;
+        margin-left: 6px;
+    }
+
+.task_icon img {
+    width: 20px;
+    height: 20px;
+}
+
+.taskBody {
+    padding: 10px;
+    margin: 0px;
+}
+
+.taskOutcomes {
+    display: flex;
+    align-items: center;
+}
+
+.contentList {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+    .contentList li {
+        border-bottom: 1px solid #c6b96b;
+        padding: 8px 0px;
+        list-style-type: none;
+        display: flex;
+        align-items: center;
+    }
+
+.start {
+    left: 10px;
+    position: absolute;
+    top: -22px;
+    background-color: #44bed5;
+    padding: 4px 15px;
+    border-radius: 4px 4px 0px 0px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.viewAllTool {
+    position: absolute;
+    background-color: #fff;
+    padding: 10px;
+    display: none;
+}
+
+    .viewAllTool ul {
+        padding: 0px;
+        margin: 0px;
+    }
+
+        .viewAllTool ul li {
+            border-bottom: 0;
+        }
+
+.e-settings:before {
+    content: '\e679';
+}
+
+.e-file:before {
+    content: '\ebdc';
+}
+
+.tooltip:focus .tooltip-icon, .tooltip:hover .tooltip-icon {
+    color: #383838;
+}
+
+.tooltip:focus ~ .tooltip-content, .tooltip:hover ~ .tooltip-content {
+    display: block;
+    z-index: 0;
+    opacity: 1;
+}
+
+.tooltip-content {
+    position: absolute;
+    top: 160px;
+    right: 60px;
+    transform: translateY(-100%);
+    border: 0.063rem solid #383838;
+    border-radius: 4px;
+    opacity: 1;
+    padding: 0.5rem 1rem;
+}
+
+.tooltip-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: help;
+    position: relative;
+    z-index: 1;
+    color: #ff9323;
+    transition: color ease 300ms;
+}
+
+.tooltip-content:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    margin-right: -30px;
+    margin-top: -10px;
+    top: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-left-color: #ffffff;
+}
